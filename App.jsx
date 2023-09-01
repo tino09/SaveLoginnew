@@ -1,4 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import CheckoutForm from './CheckoutForm';
+
+// src/stripe.js
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('YOUR_STRIPE_PUBLIC_KEY');
+
+export default stripePromise;
+
 import './App.css';
 
 function App() {
@@ -25,6 +37,14 @@ function App() {
         setItemName('');
       });
   };
+
+  const stripePromise = loadStripe('YOUR_STRIPE_PUBLIC_KEY');
+
+const Checkout = () => {
+  const [isPaymentSuccessful, setPaymentSuccessful] = useState(false);
+
+  const handleSuccessfulPayment = () => {
+    setPaymentSuccessful(true);
 
   return (
     <div className="App">
