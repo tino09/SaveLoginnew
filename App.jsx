@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from './CheckoutForm';
+import axios from 'axios';
 
 // src/stripe.js
 import { loadStripe } from '@stripe/stripe-js';
@@ -38,6 +39,20 @@ function App() {
       });
   };
 
+  const DeleteItem = () => {
+    const [itemId, setItemId] = useState('');
+    const [message, setMessage] = useState('');
+  
+    const handleDelete = async () => {
+      try {
+        const response = await axios.delete(`/api/items/${itemId}`);
+        setMessage(response.data.message);
+      } catch (error) {
+        console.error(error);
+        setMessage('Error deleting item');
+      }
+    };
+
   const stripePromise = loadStripe('YOUR_STRIPE_PUBLIC_KEY');
 
 const Checkout = () => {
@@ -62,6 +77,19 @@ const Checkout = () => {
           <li key={item._id}>{item.name}</li>
         ))}
       </ul>
+
+      <div>
+      <h2>Delete Item</h2>
+      <input
+        type="text"
+        placeholder="Item ID"
+        value={itemId}
+        onChange={(e) => setItemId(e.target.value)}
+      />
+      <button onClick={handleDelete}>Delete</button>
+      {message && <p>{message}</p>}
+    </div>
+
     </div>
   );
 }
