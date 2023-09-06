@@ -40,3 +40,33 @@ app.post('/api/items', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+// Connect to MongoDB (Make sure you have MongoDB running)
+mongoose.connect('mongodb://localhost:27017/mydb', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const Item = mongoose.model('Item', {
+  name: String,
+});
+
+app.use(bodyParser.json());
+
+// Delete an item by ID
+app.delete('/api/items/:id', async (req, res) => {
+  try {
+    const deletedItem = await Item.findByIdAndDelete(req.params.id);
+    if (!deletedItem) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+    res.status(200).json({ message: 'Item deleted' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
