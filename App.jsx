@@ -60,7 +60,7 @@ const Checkout = () => {
 
   const handleSuccessfulPayment = () => {
     setPaymentSuccessful(true);
-
+  
   return (
     <div className="App">
       <h1>React MongoDB Integration</h1>
